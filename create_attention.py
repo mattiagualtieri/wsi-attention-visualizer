@@ -20,7 +20,7 @@ def create_attention(args: dict):
 
     patches_coords = args['patches_coords']
     with h5py.File(patches_coords, 'r') as f:
-        coords = f['coords'][:]
+        coords = f['coords'][:20000]
     total_patches = len(coords)
     print(f'Successfully loaded {total_patches} patch coordinates from {patches_coords}')
 
@@ -45,15 +45,16 @@ def create_attention(args: dict):
             patch = pyvips.Image.black(256, 256)
             patch = patch.new_from_image([255, 0, 0])
             patch = patch.copy(interpretation='srgb')
-            strip = strip.insert(patch, x, y)
+            # strip = strip.insert(patch, x, y)
+            strip = strip.merge(patch, 'vertical', x, y)
         print(f'Progress: {i}/{total_patches}')
-        slide = slide.insert(strip.addalpha(), 0, 0)
+        # slide = slide.insert(strip.addalpha(), 0, 0)
 
     output_slide = args['output_file']
     print(f'Saving attention slide into {output_slide}')
-    slide.set_progress(True)
-    slide.signal_connect('eval', eval_progress)
-    slide.tiffsave(output_slide, tile=True, pyramid=True, compression='jpeg', Q=80, bigtiff=True)
+    strip.set_progress(True)
+    strip.signal_connect('eval', eval_progress)
+    strip.tiffsave(output_slide, tile=True, pyramid=True, compression='jpeg', Q=80, bigtiff=True)
     print('Attention slide saved!')
 
 
