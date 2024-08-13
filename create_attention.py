@@ -32,12 +32,14 @@ def create_attention(args: dict):
     slide_height = slide.height
     print(f'Successfully loaded {input_slide} slide')
 
+    strip = pyvips.Image.black(slide_width, slide_height)
+    strip = strip.new_from_image([255, 255, 255])
+    strip = strip.copy(interpretation='srgb')
+
     patches_chunk_size = args['patches_chunk_size']
     for i in range(0, total_patches, patches_chunk_size):
         chunk_coords = coords[i:i + patches_chunk_size]
-        strip = pyvips.Image.black(slide_width, slide_height)
-        strip = strip.new_from_image([255, 255, 255])
-        strip = strip.copy(interpretation='srgb')
+
         for coord in chunk_coords:
             x, y = coord
             patch = pyvips.Image.black(256, 256)
