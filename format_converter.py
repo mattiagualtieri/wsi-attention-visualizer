@@ -1,3 +1,4 @@
+import argparse
 import pyvips
 import os
 
@@ -19,3 +20,11 @@ def format_converter(args: dict):
         print('Convertion succeeded!')
     else:
         raise NotImplementedError(f'Converter from "{input_extension}" to "{output_extension}" not supported')
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input_file', help="Input slide (SVS format)", type=str, required=True)
+    parser.add_argument('--output_file', help="Output file (SVS format)", type=str, required=True)
+    args = vars(parser.parse_args())
+    format_converter(args)
