@@ -1,6 +1,7 @@
 import argparse
 import pyvips
 import h5py
+import os
 
 
 progress = 0
@@ -18,6 +19,10 @@ def create_attention(args: dict):
     if not use_cache:
         pyvips.cache_set_max(0)
 
+    work_dir = 'work'
+    if 'work_dir' in args:
+        work_dir = args['work_dir']
+
     patches_coords = args['patches_coords']
     with h5py.File(patches_coords, 'r') as f:
         coords = f['coords'][:]
@@ -31,6 +36,10 @@ def create_attention(args: dict):
     slide_width = slide.width
     slide_height = slide.height
     print(f'Successfully loaded {input_slide} slide')
+
+    attention = pyvips.Image.black(slide_width, slide_height).addalpha()
+    attention = attention.new_from_image([255, 255, 255, 255])
+    attention = attention.copy(interpretation='srgb')
 
     patches_chunk_size = args['patches_chunk_size']
     chunks = []
@@ -56,7 +65,7 @@ def create_attention(args: dict):
             chunk = chunk.insert(patch, x, y)
         print(f'Progress: {i}/{total_patches}')
         cropped_chunk = chunk.crop(mx, my, Mx - mx, My - my)
-        chunk_file = f'tmp/{len(chunks)}.png'
+        chunk_file = f'{work_dir}/{len(chunks)}.png'
         cropped_chunk.write_to_file(chunk_file)
         chunks.append({
             'chunk_file': chunk_file,
@@ -68,10 +77,13 @@ def create_attention(args: dict):
     print(f'Saving attention slide into {output_slide}')
     for c in chunks:
         chunk = pyvips.Image.new_from_file(c['chunk_file'])
-        slide = slide.insert(chunk, c['x'], c['y'])
-    slide.set_progress(True)
-    slide.signal_connect('eval', eval_progress)
-    slide.tiffsave(output_slide, tile=True, pyramid=True, compression='jpeg', Q=80, bigtiff=True)
+        attention = attention.composite(chunk, 'over', x=c['x'], y=c['y'])
+
+    attention.set_progress(True)
+    attention.signal_connect('eval', eval_progress)
+    attention.tiffsave(output_slide, tile=True, pyramid=True, compression='jpeg', Q=80, bigtiff=True)
+    for c in chunks:
+        os.remove(c['chunk_file'])
     print('Attention slide saved!')
 
 

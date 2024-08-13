@@ -1,6 +1,7 @@
 .idea
 input
 output
+work
 visualizer
 *.sbatch
 logs

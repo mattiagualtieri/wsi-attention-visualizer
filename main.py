@@ -4,10 +4,6 @@ from create_attention import create_attention
 from format_converter import format_converter
 
 
-# --command create_attention --input_file input/slides/slide.svs --patches_coords input/patches/slide.h5 --patches_chunk_size 100 --output_file output/slides/attention.svs --use_cache True
-# --command format_converter --input_file output/slides/attention.svs --output_file output/dzi/attention.dzi
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--command', help="Command to execute", type=str, required=True)
@@ -15,6 +11,7 @@ if __name__ == '__main__':
     parser.add_argument('--use_cache', help="Whether to use cache during processing or not", type=bool, default=True)
     parser.add_argument('--patches_coords', help="File which contains patches coordinates (from CLAM in HDF5 format)", type=str)
     parser.add_argument('--patches_chunk_size', help="Chunk size of patches to elaborate", type=int, default=1000)
+    parser.add_argument('--work_dir', help="Working directory", type=str, default='work')
     parser.add_argument('--output_file', help="Output file (SVS format)", type=str, required=True)
     args = vars(parser.parse_args())
     command = args['command']
