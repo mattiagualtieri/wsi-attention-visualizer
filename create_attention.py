@@ -20,7 +20,7 @@ def create_attention(args: dict):
 
     patches_coords = args['patches_coords']
     with h5py.File(patches_coords, 'r') as f:
-        coords = f['coords'][:1000]
+        coords = f['coords'][:]
     total_patches = len(coords)
     print(f'Successfully loaded {total_patches} patch coordinates from {patches_coords}')
 
