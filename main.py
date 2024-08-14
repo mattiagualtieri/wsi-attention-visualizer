@@ -10,6 +10,7 @@ if __name__ == '__main__':
     parser.add_argument('--input_file', help="Input slide (SVS format)", type=str, required=True)
     parser.add_argument('--use_cache', help="Whether to use cache during processing or not", type=bool, default=True)
     parser.add_argument('--patches_coords', help="File which contains patches coordinates (from CLAM in HDF5 format)", type=str)
+    parser.add_argument('--attention_weights', help="Attention weights (from MCAT in PT format)", type=str)
     parser.add_argument('--patches_chunk_size', help="Chunk size of patches to elaborate", type=int, default=1000)
     parser.add_argument('--work_dir', help="Working directory", type=str, default='work')
     parser.add_argument('--output_file', help="Output file (SVS format)", type=str, required=True)

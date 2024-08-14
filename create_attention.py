@@ -1,8 +1,10 @@
 import argparse
 import pyvips
+import torch
 import h5py
 import os
 
+from utils.color import ColorGradient
 
 progress = 0
 
@@ -37,9 +39,19 @@ def create_attention(args: dict):
     slide_height = slide.height
     print(f'Successfully loaded {input_slide} slide')
 
+    attention_weights_file = args['attention_weights']
+    attention_weights = torch.load(attention_weights_file)
+    min_val = attention_weights.min()
+    max_val = attention_weights.max()
+    attention_weights = (attention_weights - min_val) / (max_val - min_val)
+    print(f'Loaded and normalized weights from {attention_weights_file}')
+
     attention = pyvips.Image.black(slide_width, slide_height).addalpha()
     attention = attention.new_from_image([255, 255, 255, 255])
     attention = attention.copy(interpretation='srgb')
+
+    color_gradient = ColorGradient()
+    color_gradient.create_default_heatmap_gradient()
 
     patches_chunk_size = args['patches_chunk_size']
     chunks = []
@@ -49,6 +61,7 @@ def create_attention(args: dict):
         chunk = pyvips.Image.black(slide_width, slide_height).addalpha()
         chunk = chunk.new_from_image([255, 255, 255, 0])
         chunk = chunk.copy(interpretation='srgb')
+        patch_index = 0
         for coord in chunk_coords:
             x, y = coord
             if mx < 0 or x < mx:
@@ -60,9 +73,11 @@ def create_attention(args: dict):
             if My < 0 or y + 256 > My:
                 My = y + 256
             patch = pyvips.Image.black(256, 256).addalpha()
-            patch = patch.new_from_image([255, 0, 0, 255])
+            color = color_gradient.get_color_at_value(attention_weights[patch_index])
+            patch = patch.new_from_image([color[0], color[1], color[2], 255])
             patch = patch.copy(interpretation='srgb')
             chunk = chunk.insert(patch, x, y)
+            patch_index += 1
         print(f'Progress: {i}/{total_patches}')
         cropped_chunk = chunk.crop(mx, my, Mx - mx, My - my)
         chunk_file = f'{work_dir}/{len(chunks)}.png'
@@ -92,6 +107,7 @@ if __name__ == '__main__':
     parser.add_argument('--input_file', help="Input slide (SVS format)", type=str, required=True)
     parser.add_argument('--use_cache', help="Whether to use cache during processing or not", type=bool, default=True)
     parser.add_argument('--patches_coords', help="File which contains patches coordinates (from CLAM in HDF5 format)", type=str)
+    parser.add_argument('--attention_weights', help="Attention weights (from MCAT in PT format)", type=str)
     parser.add_argument('--patches_chunk_size', help="Chunk size of patches to elaborate", type=int, default=1000)
     parser.add_argument('--output_file', help="Output file (SVS format)", type=str, required=True)
     args = vars(parser.parse_args())
