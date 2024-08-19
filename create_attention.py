@@ -71,7 +71,6 @@ def create_attention(args: dict):
             if my < 0 or y < my:
                 my = y
             if Mx < 0 or x + 256 > Mx:
-                print(f'Condition true: Mx: {Mx} --> {x + 256}')
                 Mx = x + 256
             if My < 0 or y + 256 > My:
                 My = y + 256
