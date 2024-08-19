@@ -15,6 +15,14 @@ def eval_progress(_, write_progress):
         print('{}%, eta {}s'.format(write_progress.percent, write_progress.eta))
 
 
+def clamp(value, min=0, max=0):
+    if value < min:
+        return min
+    if value > max:
+        return max
+    return value
+
+
 def create_attention(args: dict):
     use_cache = args['use_cache']
     if not use_cache:
@@ -67,12 +75,10 @@ def create_attention(args: dict):
         for coord in chunk_coords:
             x, y = coord
             if mx < 0 or x < mx:
-                print(f'Condition true: mx: {mx} --> {x}')
                 mx = x
             if my < 0 or y < my:
                 my = y
             if Mx < 0 or x + 256 > Mx:
-                print(f'Condition true: Mx: {Mx} --> {x + 256}')
                 Mx = x + 256
             if My < 0 or y + 256 > My:
                 My = y + 256
@@ -83,6 +89,8 @@ def create_attention(args: dict):
             chunk = chunk.insert(patch, x, y)
             patch_index += 1
         print(f'Progress: {i}/{total_patches}')
+        mx, my = clamp(mx, max=slide_width), clamp(my, max=slide_height)
+        Mx, My = clamp(Mx, max=slide_width), clamp(My, max=slide_height)
         print(f'Cropping chunk at [x: {mx} - {Mx}, y: {my} - {My}]')
         cropped_chunk = chunk.crop(mx, my, Mx - mx, My - my)
         chunk_file = f'{work_dir}/{len(chunks)}.png'
