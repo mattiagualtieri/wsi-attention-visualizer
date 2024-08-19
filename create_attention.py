@@ -67,10 +67,12 @@ def create_attention(args: dict):
         for coord in chunk_coords:
             x, y = coord
             if mx < 0 or x < mx:
+                print(f'Condition true: mx: {mx} --> {x}')
                 mx = x
             if my < 0 or y < my:
                 my = y
             if Mx < 0 or x + 256 > Mx:
+                print(f'Condition true: Mx: {Mx} --> {x + 256}')
                 Mx = x + 256
             if My < 0 or y + 256 > My:
                 My = y + 256
@@ -82,7 +84,7 @@ def create_attention(args: dict):
             patch_index += 1
         print(f'Progress: {i}/{total_patches}')
         print(f'Cropping chunk at [x: {mx} - {Mx}, y: {my} - {My}]')
-        cropped_chunk = chunk.crop(mx, my, Mx, My)
+        cropped_chunk = chunk.crop(mx, my, Mx - mx, My - my)
         chunk_file = f'{work_dir}/{len(chunks)}.png'
         cropped_chunk.write_to_file(chunk_file)
         chunks.append({
