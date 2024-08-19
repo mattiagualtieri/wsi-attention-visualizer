@@ -1,4 +1,3 @@
-import argparse
 import pyvips
 import torch
 import h5py
@@ -40,9 +39,11 @@ def create_attention(args: dict):
     print(f'Successfully loaded {input_slide} slide')
 
     attention_weights_file = args['attention_weights']
-    attention_weights = torch.load(attention_weights_file)
-    min_val = attention_weights.min()
-    max_val = attention_weights.max()
+    attention_weights = torch.load(attention_weights_file)[1]
+    print(f'Attention weights size: {len(attention_weights)}')
+    min_val = torch.tensor([0.0]) # attention_weights.min()
+    max_val = torch.tensor([1.0]) # attention_weights.max()
+    print(f'Attention values between [{min_val.item()}, {max_val.item()}]')
     attention_weights = (attention_weights - min_val) / (max_val - min_val)
     print(f'Loaded and normalized weights from {attention_weights_file}')
 
@@ -54,6 +55,7 @@ def create_attention(args: dict):
     color_gradient.create_default_heatmap_gradient()
 
     patches_chunk_size = args['patches_chunk_size']
+    print(f'Using patches chunk size: {patches_chunk_size}')
     chunks = []
     for i in range(0, total_patches, patches_chunk_size):
         chunk_coords = coords[i:i + patches_chunk_size]
@@ -103,12 +105,12 @@ def create_attention(args: dict):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--input_file', help="Input slide (SVS format)", type=str, required=True)
-    parser.add_argument('--use_cache', help="Whether to use cache during processing or not", type=bool, default=True)
-    parser.add_argument('--patches_coords', help="File which contains patches coordinates (from CLAM in HDF5 format)", type=str)
-    parser.add_argument('--attention_weights', help="Attention weights (from MCAT in PT format)", type=str)
-    parser.add_argument('--patches_chunk_size', help="Chunk size of patches to elaborate", type=int, default=1000)
-    parser.add_argument('--output_file', help="Output file (SVS format)", type=str, required=True)
-    args = vars(parser.parse_args())
+    args = {
+        'input_file': 'input/slides/TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.svs',
+        'use_cache': True,
+        'patches_coords': 'input/patches/TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.h5',
+        'attention_weights': 'input/attention/ATTN_TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.pt',
+        'patches_chunk_size': 1000,
+        'output_file': 'output/slides/ATTN_TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.svs'
+    }
     create_attention(args)

@@ -1,4 +1,3 @@
-import argparse
 import pyvips
 import os
 
@@ -23,8 +22,10 @@ def format_converter(args: dict):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--input_file', help="Input slide (SVS format)", type=str, required=True)
-    parser.add_argument('--output_file', help="Output file (SVS format)", type=str, required=True)
-    args = vars(parser.parse_args())
+    args = {
+        'input_file': 'input/slides/TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.svs',
+        # 'input_file': 'output/slides/ATTN_TCGA-A8-A08L-01Z-00-DX1.0FC652B1-336D-4198-93FE-58D2214866D3.svs',
+        'output_file': 'output/dzi/slide.dzi',
+        # 'output_file': 'output/dzi/ATTN_TCGA-A8-A08L-01Z-00-DX1.0FC652B1-336D-4198-93FE-58D2214866D3.dzi',
+    }
     format_converter(args)
