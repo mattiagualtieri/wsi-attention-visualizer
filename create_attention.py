@@ -82,8 +82,8 @@ def create_attention(args: dict):
             chunk = chunk.insert(patch, x, y)
             patch_index += 1
         print(f'Progress: {i}/{total_patches}')
-        print(f'Cropping chunk at [x: {mx} - {Mx - mx}, y: {my} - {My - my}]')
-        cropped_chunk = chunk.crop(mx, my, Mx - mx, My - my)
+        print(f'Cropping chunk at [x: {mx} - {Mx}, y: {my} - {My}]')
+        cropped_chunk = chunk.crop(mx, my, Mx, My)
         chunk_file = f'{work_dir}/{len(chunks)}.png'
         cropped_chunk.write_to_file(chunk_file)
         chunks.append({
