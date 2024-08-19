@@ -65,13 +65,13 @@ def create_attention(args: dict):
     patches_chunk_size = args['patches_chunk_size']
     print(f'Using patches chunk size: {patches_chunk_size}')
     chunks = []
+    global_index = 0
     for i in range(0, total_patches, patches_chunk_size):
         chunk_coords = coords[i:i + patches_chunk_size]
         mx = my = Mx = My = -1
         chunk = pyvips.Image.black(slide_width, slide_height).addalpha()
         chunk = chunk.new_from_image([255, 255, 255, 0])
         chunk = chunk.copy(interpretation='srgb')
-        patch_index = 0
         for coord in chunk_coords:
             x, y = coord
             if mx < 0 or x < mx:
@@ -83,11 +83,11 @@ def create_attention(args: dict):
             if My < 0 or y + 256 > My:
                 My = y + 256
             patch = pyvips.Image.black(256, 256).addalpha()
-            color = color_gradient.get_color_at_value(attention_weights[patch_index])
+            color = color_gradient.get_color_at_value(attention_weights[global_index])
             patch = patch.new_from_image([color[0], color[1], color[2], 255])
             patch = patch.copy(interpretation='srgb')
             chunk = chunk.insert(patch, x, y)
-            patch_index += 1
+            global_index += 1
         print(f'Progress: {i}/{total_patches}')
         mx, my = clamp(mx, max=slide_width), clamp(my, max=slide_height)
         Mx, My = clamp(Mx, max=slide_width), clamp(My, max=slide_height)
