@@ -41,8 +41,8 @@ def create_attention(args: dict):
     attention_weights_file = args['attention_weights']
     attention_weights = torch.load(attention_weights_file)[1]
     print(f'Attention weights size: {len(attention_weights)}')
-    min_val = torch.tensor([0.0]) # attention_weights.min()
-    max_val = torch.tensor([1.0]) # attention_weights.max()
+    min_val = attention_weights.min()
+    max_val = attention_weights.max()
     print(f'Attention values between [{min_val.item()}, {max_val.item()}]')
     attention_weights = (attention_weights - min_val) / (max_val - min_val)
     print(f'Loaded and normalized weights from {attention_weights_file}')
