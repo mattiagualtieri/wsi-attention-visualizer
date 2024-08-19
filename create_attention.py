@@ -36,7 +36,7 @@ def create_attention(args: dict):
         slide = slide.colourspace('srgb')
     slide_width = slide.width
     slide_height = slide.height
-    print(f'Successfully loaded {input_slide} slide')
+    print(f'Successfully loaded {input_slide} slide: [w: {slide_width}, h: {slide_height}]')
 
     attention_weights_file = args['attention_weights']
     attention_weights = torch.load(attention_weights_file)[1]
