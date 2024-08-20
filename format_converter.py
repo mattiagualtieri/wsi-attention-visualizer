@@ -44,7 +44,7 @@ if __name__ == '__main__':
     args = {
         # 'input_file': 'input/slides/TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.svs',
         'input_file': 'output/slides/ATTN_TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.svs',
-        # 'output_file': 'output/dzi/slide.dzi',
+        # 'output_file': 'output/dzi/TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.dzi',
         'output_file': 'output/dzi/ATTN_TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.dzi',
         'smooth': True
     }
