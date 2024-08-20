@@ -50,7 +50,7 @@ def create_attention(args: dict):
     print(f'Successfully loaded {input_slide} slide: [w: {slide_width}, h: {slide_height}]')
 
     attention_weights_file = args['attention_weights']
-    attention_weights = torch.load(attention_weights_file)[1]
+    attention_weights = torch.load(attention_weights_file, weights_only=True)[1]
     print(f'Attention weights size: {len(attention_weights)}')
     min_val = attention_weights.min()
     max_val = attention_weights.max()
