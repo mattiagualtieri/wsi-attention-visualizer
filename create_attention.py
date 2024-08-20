@@ -69,7 +69,7 @@ def create_attention(args: dict):
     print(f'Using patches chunk size: {patches_chunk_size}')
     chunks = []
     global_index = 0
-    # progress_bar_patches.max = total_patches
+    progress_bar_patches.max = total_patches
     for i in range(0, total_patches, patches_chunk_size):
         chunk_coords = coords[i:i + patches_chunk_size]
         mx = my = Mx = My = -1
@@ -103,6 +103,7 @@ def create_attention(args: dict):
             'x': mx,
             'y': my
         })
+    progress_bar_patches.finish()
 
     output_slide = args['output_file']
     print(f'Saving attention slide into {output_slide}')
