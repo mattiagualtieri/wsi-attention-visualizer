@@ -15,8 +15,11 @@ def eval_progress(_, write_progress):
         progress_bar.next()
 
 
-def from_svs_to_dzi(input_file, output_file):
+def from_svs_to_dzi(input_file, output_file, smooth=False):
     svs_image = pyvips.Image.new_from_file(input_file)
+    if smooth:
+        print('Applying smoothing to the image')
+        svs_image = svs_image.gaussblur(100)
     dzi_image, _ = os.path.splitext(output_file)
     svs_image.set_progress(True)
     svs_image.signal_connect('eval', eval_progress)
@@ -31,7 +34,7 @@ def format_converter(args: dict):
     _, output_extension = os.path.splitext(output_file)
     if input_extension == '.svs' and output_extension == '.dzi':
         print(f'Converting {input_file} into {output_file}')
-        from_svs_to_dzi(input_file, output_file)
+        from_svs_to_dzi(input_file, output_file, args['smooth'])
         print('Convertion succeeded!')
     else:
         raise NotImplementedError(f'Converter from "{input_extension}" to "{output_extension}" not supported')
@@ -43,5 +46,6 @@ if __name__ == '__main__':
         'input_file': 'output/slides/ATTN_TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.svs',
         # 'output_file': 'output/dzi/slide.dzi',
         'output_file': 'output/dzi/ATTN_TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.dzi',
+        'smooth': True
     }
     format_converter(args)

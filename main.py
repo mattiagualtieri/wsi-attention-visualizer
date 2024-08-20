@@ -13,6 +13,7 @@ if __name__ == '__main__':
     parser.add_argument('--attention_weights', help="Attention weights (from MCAT in PT format)", type=str)
     parser.add_argument('--patches_chunk_size', help="Chunk size of patches to elaborate", type=int, default=1000)
     parser.add_argument('--work_dir', help="Working directory", type=str, default='work')
+    parser.add_argument('--smooth', help="Whether to smooth or not the attention patches", type=bool, default=False)
     parser.add_argument('--output_file', help="Output file (SVS format)", type=str, required=True)
     args = vars(parser.parse_args())
     command = args['command']
