@@ -92,7 +92,7 @@ def create_attention(args: dict):
             patch = patch.copy(interpretation='srgb')
             chunk = chunk.insert(patch, x, y)
             global_index += 1
-        progress_bar_patches.next(n=patches_chunk_size)
+            progress_bar_patches.next()
         mx, my = clamp(mx, max=slide_width), clamp(my, max=slide_height)
         Mx, My = clamp(Mx, max=slide_width), clamp(My, max=slide_height)
         cropped_chunk = chunk.crop(mx, my, Mx - mx, My - my)
