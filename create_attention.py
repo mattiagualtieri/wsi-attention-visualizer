@@ -4,15 +4,18 @@ import h5py
 import os
 
 from utils.color import ColorGradient
+from progress.bar import Bar
 
 progress = 0
+progress_bar_patches = Bar('Processing patches', suffix='%(index)d/%(max)d, ETA: %(eta)ds')
+progress_bar_attention = Bar('Saving attention file', suffix='%(percent)d%%, ETA: %(eta)ds')
 
 
 def eval_progress(_, write_progress):
     global progress
     if write_progress.percent != progress:
         progress = write_progress.percent
-        print('{}%, eta {}s'.format(write_progress.percent, write_progress.eta))
+        progress_bar_attention.next()
 
 
 def clamp(value, min=0, max=0):
@@ -66,6 +69,7 @@ def create_attention(args: dict):
     print(f'Using patches chunk size: {patches_chunk_size}')
     chunks = []
     global_index = 0
+    # progress_bar_patches.max = total_patches
     for i in range(0, total_patches, patches_chunk_size):
         chunk_coords = coords[i:i + patches_chunk_size]
         mx = my = Mx = My = -1
@@ -88,10 +92,9 @@ def create_attention(args: dict):
             patch = patch.copy(interpretation='srgb')
             chunk = chunk.insert(patch, x, y)
             global_index += 1
-        print(f'Progress: {i}/{total_patches}')
+        progress_bar_patches.next(n=patches_chunk_size)
         mx, my = clamp(mx, max=slide_width), clamp(my, max=slide_height)
         Mx, My = clamp(Mx, max=slide_width), clamp(My, max=slide_height)
-        print(f'Cropping chunk at [x: {mx} - {Mx}, y: {my} - {My}]')
         cropped_chunk = chunk.crop(mx, my, Mx - mx, My - my)
         chunk_file = f'{work_dir}/{len(chunks)}.png'
         cropped_chunk.write_to_file(chunk_file)
@@ -113,6 +116,7 @@ def create_attention(args: dict):
     for c in chunks:
         os.remove(c['chunk_file'])
     print('Attention slide saved!')
+    progress_bar_attention.finish()
 
 
 if __name__ == '__main__':
