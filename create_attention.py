@@ -107,7 +107,7 @@ def create_attention(args: dict):
         chunk_file = f'{work_dir}/{len(chunks)}.png'
         if create_png:
             cropped_chunk = chunk.crop(mx, my, Mx - mx, My - my)
-            cropped_chunk.write_to_file(chunk_file)
+            cropped_chunk.cast("uchar").write_to_file(chunk_file)
         chunks.append({
             'chunk_file': chunk_file,
             'x': mx,
