@@ -123,7 +123,7 @@ def create_attention(args: dict):
 
     attention.set_progress(True)
     attention.signal_connect('eval', eval_progress)
-    attention.tiffsave(output_slide, tile=True, pyramid=True, compression='jpeg', Q=80, bigtiff=True)
+    attention.cast("uchar").tiffsave(output_slide, tile=True, pyramid=True, compression='jpeg', Q=80, bigtiff=True)
     for c in chunks:
         os.remove(c['chunk_file'])
     print('Attention slide saved!')
@@ -136,7 +136,7 @@ if __name__ == '__main__':
         'use_cache': True,
         'patches_coords': 'input/patches/TCGA-A2-A0EY-01Z-00-DX1.2F2428B3-0767-48E0-AC22-443C244CBD16.h5',
         'attention_weights': 'input/attention/ATTN_TCGA-A2-A0EY-01Z-00-DX1.2F2428B3-0767-48E0-AC22-443C244CBD16.pt',
-        'patches_chunk_size': 1000,
+        'patches_chunk_size': 2000,
         'output_file': 'output/slides/ATTN_TCGA-A2-A0EY-01Z-00-DX1.2F2428B3-0767-48E0-AC22-443C244CBD16.svs'
     }
     create_attention(args)
