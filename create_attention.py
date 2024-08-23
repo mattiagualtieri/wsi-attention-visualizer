@@ -65,6 +65,11 @@ def create_attention(args: dict):
     color_gradient = ColorGradient()
     color_gradient.create_default_heatmap_gradient()
 
+    create_png = True
+    if len(os.listdir(work_dir)) != 0:
+        print(f'Directory {work_dir} not empty, using existing PNGs')
+        create_png = False
+
     patches_chunk_size = args['patches_chunk_size']
     print(f'Using patches chunk size: {patches_chunk_size}')
     chunks = []
@@ -73,9 +78,10 @@ def create_attention(args: dict):
     for i in range(0, total_patches, patches_chunk_size):
         chunk_coords = coords[i:i + patches_chunk_size]
         mx = my = Mx = My = -1
-        chunk = pyvips.Image.black(slide_width, slide_height).addalpha()
-        chunk = chunk.new_from_image([255, 255, 255, 0])
-        chunk = chunk.copy(interpretation='srgb')
+        if create_png:
+            chunk = pyvips.Image.black(slide_width, slide_height).addalpha()
+            chunk = chunk.new_from_image([255, 255, 255, 0])
+            chunk = chunk.copy(interpretation='srgb')
         for coord in chunk_coords:
             x, y = coord
             if mx < 0 or x < mx:
@@ -86,18 +92,22 @@ def create_attention(args: dict):
                 Mx = x + 256
             if My < 0 or y + 256 > My:
                 My = y + 256
-            patch = pyvips.Image.black(256, 256).addalpha()
-            color = color_gradient.get_color_at_value(attention_weights[global_index])
-            patch = patch.new_from_image([color[0], color[1], color[2], 255])
-            patch = patch.copy(interpretation='srgb')
-            chunk = chunk.insert(patch, x, y)
+
+            if create_png:
+                patch = pyvips.Image.black(256, 256).addalpha()
+                color = color_gradient.get_color_at_value(attention_weights[global_index])
+                patch = patch.new_from_image([color[0], color[1], color[2], 255])
+                patch = patch.copy(interpretation='srgb')
+                chunk = chunk.insert(patch, x, y)
+
             global_index += 1
         progress_bar_patches.next(n=patches_chunk_size)
         mx, my = clamp(mx, max=slide_width), clamp(my, max=slide_height)
         Mx, My = clamp(Mx, max=slide_width), clamp(My, max=slide_height)
-        cropped_chunk = chunk.crop(mx, my, Mx - mx, My - my)
         chunk_file = f'{work_dir}/{len(chunks)}.png'
-        cropped_chunk.write_to_file(chunk_file)
+        if create_png:
+            cropped_chunk = chunk.crop(mx, my, Mx - mx, My - my)
+            cropped_chunk.write_to_file(chunk_file)
         chunks.append({
             'chunk_file': chunk_file,
             'x': mx,
