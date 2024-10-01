@@ -42,10 +42,10 @@ def format_converter(args: dict):
 
 if __name__ == '__main__':
     args = {
-        # 'input_file': 'input/slides/TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.svs',
-        'input_file': 'output/slides/ATTN_TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.svs',
-        # 'output_file': 'output/dzi/TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.dzi',
-        'output_file': 'output/dzi/ATTN_TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.dzi',
-        'smooth': True
+        'input_file': 'input/slides/tcga-tcga-tcga-ov/TCGA-25-1320-01A-01-TS1.7baccc6e-48b9-4f66-b04a-5a550b77dfce.svs',
+        # 'input_file': 'output/slides/ATTN_TCGA-A2-A0EY-01Z-00-DX1.2F2428B3-0767-48E0-AC22-443C244CBD16.svs',
+        'output_file': 'output/dzi/tcga-tcga-tcga-ov/TCGA-25-1320-01A-01-TS1.7baccc6e-48b9-4f66-b04a-5a550b77dfce.dzi',
+        # 'output_file': 'output/dzi/ATTN_TCGA-A2-A0EY-01Z-00-DX1.2F2428B3-0767-48E0-AC22-443C244CBD16.dzi',
+        'smooth': False
     }
     format_converter(args)

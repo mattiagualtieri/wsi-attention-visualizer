@@ -26,6 +26,23 @@ def clamp(value, min=0, max=0):
     return value
 
 
+def get_min_max_chunked(tensor, chunk_size=10000):
+    min_val = float('inf')
+    max_val = float('-inf')
+    for i in range(0, tensor.size(0), chunk_size):
+        chunk = tensor[i:i + chunk_size]
+        min_val = min(min_val, chunk.min().item())
+        max_val = max(max_val, chunk.max().item())
+    return torch.tensor(min_val), torch.tensor(max_val)
+
+
+def normalize_tensor_chunked(tensor, min_val, max_val, chunk_size=10000):
+    num_elements = tensor.numel()
+    for start in range(0, num_elements, chunk_size):
+        end = min(start + chunk_size, num_elements)
+        tensor.view(-1)[start:end] = (tensor.view(-1)[start:end] - min_val) / (max_val - min_val)
+
+
 def create_attention(args: dict):
     use_cache = args['use_cache']
     if not use_cache:
@@ -52,10 +69,9 @@ def create_attention(args: dict):
     attention_weights_file = args['attention_weights']
     attention_weights = torch.load(attention_weights_file, weights_only=True)[1]
     print(f'Attention weights size: {len(attention_weights)}')
-    min_val = attention_weights.min()
-    max_val = attention_weights.max()
+    min_val, max_val = get_min_max_chunked(attention_weights)
     print(f'Attention values between [{min_val.item()}, {max_val.item()}]')
-    attention_weights = (attention_weights - min_val) / (max_val - min_val)
+    normalize_tensor_chunked(attention_weights, min_val, max_val)
     print(f'Loaded and normalized weights from {attention_weights_file}')
 
     attention = pyvips.Image.black(slide_width, slide_height).addalpha()
@@ -78,6 +94,7 @@ def create_attention(args: dict):
     for i in range(0, total_patches, patches_chunk_size):
         chunk_coords = coords[i:i + patches_chunk_size]
         mx = my = Mx = My = -1
+        chunk = None
         if create_png:
             chunk = pyvips.Image.black(slide_width, slide_height).addalpha()
             chunk = chunk.new_from_image([255, 255, 255, 0])
@@ -132,11 +149,12 @@ def create_attention(args: dict):
 
 if __name__ == '__main__':
     args = {
-        'input_file': 'input/slides/TCGA-A2-A0EY-01Z-00-DX1.2F2428B3-0767-48E0-AC22-443C244CBD16.svs',
-        'use_cache': True,
-        'patches_coords': 'input/patches/TCGA-A2-A0EY-01Z-00-DX1.2F2428B3-0767-48E0-AC22-443C244CBD16.h5',
-        'attention_weights': 'input/attention/ATTN_TCGA-A2-A0EY-01Z-00-DX1.2F2428B3-0767-48E0-AC22-443C244CBD16.pt',
+        'input_file': 'input/slides/tcga-ov/TCGA-25-1320-01A-01-TS1.7baccc6e-48b9-4f66-b04a-5a550b77dfce.svs',
+        'use_cache': False,
+        'patches_coords': 'input/patches/tcga-ov/TCGA-25-1320-01A-01-TS1.7baccc6e-48b9-4f66-b04a-5a550b77dfce.h5',
+        'attention_weights': 'input/attention/tcga-ov/ATTN_TCGA-25-1320_E50.pt',
         'patches_chunk_size': 2000,
-        'output_file': 'output/slides/ATTN_TCGA-A2-A0EY-01Z-00-DX1.2F2428B3-0767-48E0-AC22-443C244CBD16.svs'
+        'output_file': 'output/slides/tcga-ov/ATTN_TCGA-25-1320_E50.svs'
     }
-    create_attention(args)
+    with torch.no_grad():
+        create_attention(args)
