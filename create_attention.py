@@ -36,11 +36,38 @@ def get_min_max_chunked(tensor, chunk_size=10000):
     return torch.tensor(min_val), torch.tensor(max_val)
 
 
-def normalize_tensor_chunked(tensor, min_val, max_val, chunk_size=10000):
+def get_mean_std_chunked(tensor, chunk_size=10000):
+    mean = 0.0
+    num_elements = 0
+    for i in range(0, tensor.size(0), chunk_size):
+        chunk = tensor[i:i + chunk_size]
+        mean += chunk.sum().item()
+        num_elements += chunk.numel()
+
+    mean /= num_elements
+
+    variance = 0.0
+    for i in range(0, tensor.size(0), chunk_size):
+        chunk = tensor[i:i + chunk_size]
+        variance += ((chunk - mean) ** 2).sum().item()
+
+    variance /= num_elements
+    std = torch.sqrt(torch.tensor(variance))
+    return torch.tensor(mean), std
+
+
+def normalize_tensor_chunked(tensor, min_val, max_val, chunk_size=30000):
     num_elements = tensor.numel()
     for start in range(0, num_elements, chunk_size):
         end = min(start + chunk_size, num_elements)
         tensor.view(-1)[start:end] = (tensor.view(-1)[start:end] - min_val) / (max_val - min_val)
+
+
+def standardize_tensor_chunked(tensor, mean, std, chunk_size=30000):
+    for i in range(0, tensor.size(0), chunk_size):
+        chunk = tensor[i:i + chunk_size]
+        tensor[i:i + chunk_size] = (chunk - mean) / std
+    return tensor
 
 
 def create_attention(args: dict):
@@ -71,6 +98,9 @@ def create_attention(args: dict):
     print(f'Attention weights size: {len(attention_weights)}')
     min_val, max_val = get_min_max_chunked(attention_weights)
     print(f'Attention values between [{min_val.item()}, {max_val.item()}]')
+    mean, std = get_mean_std_chunked(attention_weights)
+    print(f'Attention mean and std [{mean.item()}, {std.item()}]')
+    # attention_weights = standardize_tensor_chunked(attention_weights, mean, std)
     normalize_tensor_chunked(attention_weights, min_val, max_val)
     print(f'Loaded and normalized weights from {attention_weights_file}')
 
@@ -140,7 +170,7 @@ def create_attention(args: dict):
 
     attention.set_progress(True)
     attention.signal_connect('eval', eval_progress)
-    attention.cast("uchar").tiffsave(output_slide, tile=True, pyramid=True, compression='jpeg', Q=80, bigtiff=True)
+    attention.cast("uchar").tiffsave(output_slide, tile=True, pyramid=True, compression='jpeg', Q=60, bigtiff=True)
     for c in chunks:
         os.remove(c['chunk_file'])
     print('Attention slide saved!')
@@ -152,9 +182,9 @@ if __name__ == '__main__':
         'input_file': 'input/slides/tcga-ov/TCGA-25-1320-01A-01-TS1.7baccc6e-48b9-4f66-b04a-5a550b77dfce.svs',
         'use_cache': False,
         'patches_coords': 'input/patches/tcga-ov/TCGA-25-1320-01A-01-TS1.7baccc6e-48b9-4f66-b04a-5a550b77dfce.h5',
-        'attention_weights': 'input/attention/tcga-brca/ATTN_TCGA-A2-A0CW-01Z-00-DX1.8E313A22-B0E8-44CF-ADEA-8BF29BA23FFE.pt',
-        'patches_chunk_size': 2000,
-        'output_file': 'output/slides/tcga-ov/ATTN_TCGA-25-1320_E50_local.svs'
+        'attention_weights': 'input/attention/tcga-ov/ATTN_TCGA-25-1320_202410081420_E20_0.pt',
+        'patches_chunk_size': 200,
+        'output_file': 'output/slides/tcga-ov/ATTN_TCGA-25-1320_E50_local_2.svs'
     }
     with torch.no_grad():
         create_attention(args)
