@@ -170,7 +170,7 @@ def create_attention(args: dict):
 
     attention.set_progress(True)
     attention.signal_connect('eval', eval_progress)
-    attention.cast("uchar").tiffsave(output_slide, tile=True, pyramid=True, compression='jpeg', Q=60, bigtiff=True)
+    attention.cast("uchar").tiffsave(output_slide, tile=True, pyramid=True, compression='jpeg', Q=80, bigtiff=True)
     for c in chunks:
         os.remove(c['chunk_file'])
     print('Attention slide saved!')
