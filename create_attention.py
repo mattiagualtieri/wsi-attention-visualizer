@@ -97,8 +97,8 @@ def create_attention(args: dict):
     attention_weights = torch.load(attention_weights_file, weights_only=True, map_location=torch.device('cpu'))[0]
     print(f'Attention weights size: {len(attention_weights)}')
 
-    if total_patches > len(attention_weights):
-        raise RuntimeError('The number of patches and the number of attention weights is not ok')
+    # if total_patches > len(attention_weights):
+    #     raise RuntimeError('The number of patches and the number of attention weights is not ok')
 
     min_val, max_val = get_min_max_chunked(attention_weights)
     print(f'Attention values between [{min_val.item()}, {max_val.item()}]')
