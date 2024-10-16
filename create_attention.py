@@ -146,10 +146,11 @@ def create_attention(args: dict):
 
             if create_png:
                 patch = pyvips.Image.black(256, 256).addalpha()
-                color = color_gradient.get_color_at_value(attention_weights[global_index])
-                patch = patch.new_from_image([color[0], color[1], color[2], 255])
-                patch = patch.copy(interpretation='srgb')
-                chunk = chunk.insert(patch, x, y)
+                if global_index < len(attention_weights):
+                    color = color_gradient.get_color_at_value(attention_weights[global_index])
+                    patch = patch.new_from_image([color[0], color[1], color[2], 255])
+                    patch = patch.copy(interpretation='srgb')
+                    chunk = chunk.insert(patch, x, y)
 
             global_index += 1
         progress_bar_patches.next(n=patches_chunk_size)
