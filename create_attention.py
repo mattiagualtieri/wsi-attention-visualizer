@@ -97,8 +97,8 @@ def create_attention(args: dict):
     attention_weights = torch.load(attention_weights_file, weights_only=True, map_location=torch.device('cpu'))[0]
     print(f'Attention weights size: {len(attention_weights)}')
 
-    if total_patches != len(attention_weights):
-        raise RuntimeError('The number of patches and the number of attention weights must be the same')
+    if total_patches > len(attention_weights):
+        raise RuntimeError('The number of patches and the number of attention weights is not ok')
 
     min_val, max_val = get_min_max_chunked(attention_weights)
     print(f'Attention values between [{min_val.item()}, {max_val.item()}]')
@@ -183,12 +183,12 @@ def create_attention(args: dict):
 
 if __name__ == '__main__':
     args = {
-        'input_file': 'input/slides/tcga-ov/TCGA-25-1635-01A-01-BS1.bf595f95-9e5f-4b08-8d7e-0b7b08a7c6ee.svs',
+        'input_file': 'input/slides/decider-ov/D354_pOme1_DE_HE.svs',
         'use_cache': False,
-        'patches_coords': 'input/patches/tcga-ov/TCGA-25-1635-01A-01-BS1.bf595f95-9e5f-4b08-8d7e-0b7b08a7c6ee.h5',
-        'attention_weights': 'input/attention/tcga-ov/ATTN_MCAT_TCGA-25-1635_202410091347_E15_0.pt',
+        'patches_coords': 'input/patches/decider-ov/D354_pOme1_DE_HE.h5',
+        'attention_weights': 'input/attention/decider-ov/ATTN_NaCAGAT_D354_202410101031_E20_0.pt',
         'patches_chunk_size': 200,
-        'output_file': 'output/slides/tcga-ov/ATTN_MCAT_TCGA-25-1635_local.svs'
+        'output_file': 'output/slides/decider-ov/ATTN_NaCAGAT_D354_202410101031_E20_0_local.svs'
     }
     with torch.no_grad():
         create_attention(args)
