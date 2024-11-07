@@ -28,7 +28,7 @@ class ColorGradient:
         self._color.clear()
         self._color.append(self.ColorPoint(0, 0, 255, 0.0))  # Blue
         self._color.append(self.ColorPoint(0, 255, 255, 0.15))  # Cyan
-        self._color.append(self.ColorPoint(0, 255, 0, 0.50))  # Green
+        self._color.append(self.ColorPoint(0, 255, 0, 0.30))  # Green
         self._color.append(self.ColorPoint(255, 255, 0, 0.45))  # Yellow
         self._color.append(self.ColorPoint(255, 0, 0, 1.0))  # Red
 
