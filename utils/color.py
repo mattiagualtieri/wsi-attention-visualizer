@@ -27,9 +27,9 @@ class ColorGradient:
     def create_default_heatmap_gradient(self):
         self._color.clear()
         self._color.append(self.ColorPoint(0, 0, 255, 0.0))  # Blue
-        self._color.append(self.ColorPoint(0, 255, 255, 0.25))  # Cyan
-        self._color.append(self.ColorPoint(0, 255, 0, 0.50))  # Green
-        self._color.append(self.ColorPoint(255, 255, 0, 0.75))  # Yellow
+        self._color.append(self.ColorPoint(0, 255, 255, 0.15))  # Cyan
+        self._color.append(self.ColorPoint(0, 255, 0, 0.30))  # Green
+        self._color.append(self.ColorPoint(255, 255, 0, 0.45))  # Yellow
         self._color.append(self.ColorPoint(255, 0, 0, 1.0))  # Red
 
     def get_color_at_value(self, value):
