@@ -104,8 +104,8 @@ def create_attention(args: dict):
     print(f'Attention values between [{min_val.item()}, {max_val.item()}]')
     mean, std = get_mean_std_chunked(attention_weights)
     print(f'Attention mean and std [{mean.item()}, {std.item()}]')
-    # attention_weights = standardize_tensor_chunked(attention_weights, mean, std)
     normalize_tensor_chunked(attention_weights, min_val, max_val)
+    # attention_weights = standardize_tensor_chunked(attention_weights, mean, std)
     print(f'Loaded and normalized weights from {attention_weights_file}')
 
     attention = pyvips.Image.black(slide_width, slide_height).addalpha()
@@ -183,13 +183,18 @@ def create_attention(args: dict):
 
 
 if __name__ == '__main__':
+
+    dataset = 'tcga-ov'
+    attention = 'ATTN_MCAT_TCGA-WR-A838_20241106161402_E20_0'
+    slide = 'TCGA-WR-A838-01Z-00-DX1.5FE22DE4-CEFB-45F6-9299-505023A8F3BA'
+
     args = {
-        'input_file': 'input/slides/decider-ov/D354_pOme1_DE_HE.svs',
+        'input_file': f'input/slides/{dataset}/{slide}.svs',
         'use_cache': False,
-        'patches_coords': 'input/patches/decider-ov/D354_pOme1_DE_HE.h5',
-        'attention_weights': 'input/attention/decider-ov/ATTN_NaCAGAT_D354_202410101031_E20_0.pt',
-        'patches_chunk_size': 200,
-        'output_file': 'output/slides/decider-ov/ATTN_NaCAGAT_D354_202410101031_E20_0_local.svs'
+        'patches_coords': f'input/patches/{dataset}/{slide}.h5',
+        'attention_weights': f'input/attention/{dataset}/{attention}.pt',
+        'patches_chunk_size': 1000,
+        'output_file': f'output/slides/{dataset}/{attention}.svs'
     }
     with torch.no_grad():
         create_attention(args)
