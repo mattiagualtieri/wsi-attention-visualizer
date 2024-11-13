@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div id="container">
+        <div id="slide">
+            <img id="indicator" src="indicator.png">
+        </div>
+        <div id="buttonWrapper">
+            <!--
+                    Naming convention:
+                    - Cancer type (TCGA-BRCA, DECIDER-OV, ...)
+                    - Patient (TCGA-A2-A0EY, D328, ...)
+                    - Signature (TUMOR-SUPPRESSOR, CCN1, ...)
+                    - Model (NaCAGaT, MCAT)
+                    - Epoch (05, 20, ...)
+            -->
+            <select id="cancerSelector">
+                <option value="TCGA-BRCA">TCGA-BRCA</option>
+                <option value="TCGA-OV">TCGA-OV</option>
+                <option value="DECIDER">DECIDER</option>
+            </select>
+            <select id="patientSelector">
+            </select>
+            <select id="signatureSelector">
+            </select>
+            <select id="epochSelector">
+            </select>
+            <select id="modelSelector">
+                <option value="NaCAGaT">NaCAGaT</option>
+                <option value="MCAT">MCAT</option>
+            </select>
+            <div id="notes">
+
+            </div>
+            <button id="toggleButton">Toggle Attention Map</button>
+
+        </div>
+    </div>
+    <script src="openseadragon/openseadragon.min.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>

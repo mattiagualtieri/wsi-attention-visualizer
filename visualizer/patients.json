@@ -1,0 +1,356 @@
+{
+    "TCGA-BRCA": [
+        {
+            "id": "TCGA-A2-A0EY",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "Tumor Suppressor Genes",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "TCGA-A2-A0CW",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "Tumor Suppressor Genes",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        }
+    ],
+    "TCGA-OV": [
+        {
+            "id": "TCGA-57-1993",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                },
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "TCGA-13-A5FT",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                },
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "TCGA-WR-A838",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                },
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "TCGA-23-1111",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                },
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "TCGA-23-2078",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                },
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        }
+    ],
+    "DECIDER": [
+        {
+            "id": "D354",
+            "visible": true,
+            "notes": "Comparison between NaCAGaT and MCAT",
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "D346",
+            "visible": true,
+            "notes": "Comparison between CCNE1 and EMT, comparison between NaCAGaT and MCAT",
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                },
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "D328",
+            "visible": true,
+            "notes": "Patient with low expression of EMT Target Genes. Comparison between CCNE1 and EMT",
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                },
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "D357",
+            "visible": true,
+            "notes": "Patient with low expression of EMT Target Genes. Comparison between CCNE1 and EMT",
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                },
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "D335",
+            "visible": true,
+            "notes": "With this sample is possible to evaluate the progressive changes in attention during training epochs",
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        5,
+                        15,
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "H311",
+            "visible": true,
+            "notes": "Patient with high expression of EMT Target Genes",
+            "signatures": [
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "D360",
+            "visible": true,
+            "notes": "Patient with high expression of EMT Target Genes",
+            "signatures": [
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "H043",
+            "visible": true,
+            "notes": "Patient with high expression of EMT Target Genes",
+            "signatures": [
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "H178",
+            "visible": true,
+            "notes": "Patient with low expression of EMT Target Genes. This is an example of \"bad\" sample, the model is allucinated",
+            "signatures": [
+                {
+                    "name": "EMT",
+                    "epochs": [
+                        "20 (1)",
+                        "20 (2)"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "H224",
+            "visible": false,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "H224-CCNE1",
+            "visible": false,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "M013",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "M013-CCNE1",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "H325",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "H325-CCNE1",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "H084",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        "20 (2)"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "H084-CCNE1",
+            "visible": true,
+            "signatures": [
+                {
+                    "name": "CCNE1",
+                    "epochs": [
+                        20
+                    ]
+                }
+            ]
+        }
+    ]
+}
