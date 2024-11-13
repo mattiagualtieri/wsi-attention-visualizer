@@ -87,3 +87,5 @@ must be added in the correspondent cancer type (e.g. TCGA-OV). A patient is defi
 ```
 
 ### Visualize attention
+
+https://github.com/user-attachments/assets/4ac85676-4e0a-4385-af99-31793ac33f2b
